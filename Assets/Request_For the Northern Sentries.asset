@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35fae6b0e140a3c25bb6df27b52795d3, type: 3}
+  m_Name: Request_For the Northern Sentries
+  m_EditorClassIdentifier: Assembly-CSharp::RequestData
+  requestTitle: For the Northern Sentries
+  flavourText: The guards on the northern battlements have lacerations and wounds
+    from sparring. They request a fast-acting medicine to speed up their healing.
+  requiredMedicine: {fileID: 11400000, guid: 3b2f3e78d48693a26aabf3a9e61496c0, type: 2}
+  quantity: 1

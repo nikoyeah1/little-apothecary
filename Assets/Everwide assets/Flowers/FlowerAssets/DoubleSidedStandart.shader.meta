@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d2516dfbccb90b544b5b3940867d385d
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 319833
+  packageName: Wild Low Poly Flowers Pack
+  packageVersion: 1.0
+  assetPath: Assets/Everwide assets/Flowers/FlowerAssets/DoubleSidedStandart.shader
+  uploadId: 758311

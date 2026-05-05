@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 027b1c297f7151bf08c6fe2a96af38b9, type: 3}
+  m_Name: NightTincture
+  m_EditorClassIdentifier: Assembly-CSharp::MedicineData
+  medicineName: Night Tincture
+  description: A potent pain remedy taken before sleep. Handle carefully; the nightshade
+    must be precisely measured.
+  icon: {fileID: 0}
+  labelColor: {r: 0.2901961, g: 0.20784314, b: 0.3764706, a: 1}
+  ingredients:
+  - herb: {fileID: 11400000, guid: 33996414bc7e208319b10135b682b0f9, type: 2}
+    quantity: 2
+  - herb: {fileID: 11400000, guid: b13a3adf69d4759c7a4588409ca8d9d3, type: 2}
+    quantity: 1
