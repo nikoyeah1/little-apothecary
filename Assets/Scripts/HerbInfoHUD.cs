@@ -34,7 +34,7 @@ public class HerbInfoHUD : MonoBehaviour
     {
         if (herbNameText)    herbNameText.text    = herbName;
         if (descriptionText) descriptionText.text = description;
-        if (promptText)      promptText.text      = "[ E ]  Pick Up";
+        if (promptText)      promptText.text      = "[ E ]  Interact";
 
         infoPopup?.SetActive(true);
         Fade(1f, fadeInDuration);

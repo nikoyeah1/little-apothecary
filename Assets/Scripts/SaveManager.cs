@@ -168,7 +168,7 @@ public class SaveManager : MonoBehaviour
             if (cc) cc.enabled = true;
 
             PlayerController pc = player.GetComponent<PlayerController>();
-            if (pc != null) pc.currentWeight = data.currentWeight;
+            if (pc != null) pc.currentWeight = 0f;
 
             Inventory inv = player.GetComponent<Inventory>();
             if (inv != null)
