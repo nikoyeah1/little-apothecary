@@ -4,17 +4,13 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager Instance { get; private set; }
 
     public bool IsPaused { get; private set; } = false;
 
     [Header("Scene Names")]
-    [Tooltip("Must exactly match the scene name in Build Settings.")]
     public string mainMenuSceneName = "MainMenu";
-
-    [Tooltip("Must exactly match the scene name in Build Settings.")]
-    public string gameSceneName = "Game";
+    public string gameSceneName     = "Game";
 
     void Awake()
     {
@@ -65,7 +61,12 @@ public class GameManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        IsPaused       = false;
         Time.timeScale = 1f;
+
+        AudioManager.Instance?.FadeMusic(0f, 0.5f);
+        AudioManager.Instance?.StopAmbient();
+
         SceneManager.LoadScene(gameSceneName);
     }
 
@@ -73,6 +74,13 @@ public class GameManager : MonoBehaviour
     {
         IsPaused       = false;
         Time.timeScale = 1f;
+
+        AudioManager.Instance?.StopMusic();
+        AudioManager.Instance?.StopAmbient();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible   = true;
+
         SceneManager.LoadScene(mainMenuSceneName);
     }
 

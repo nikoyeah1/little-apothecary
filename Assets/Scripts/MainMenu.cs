@@ -1,18 +1,14 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     [Header("Panels")]
-    [Tooltip("The root panel shown on first open.")]
     [SerializeField] private GameObject mainPanel;
-
-    [Tooltip("Hidden by default. Shown when Options is pressed.")]
     [SerializeField] private GameObject optionsPanel;
 
-    [Header("Title Audio")]
-    [Tooltip("Ambient or music clip to play on the main menu.")]
+    [Header("Audio")]
+    [Tooltip("Music clip to play on the main menu.")]
     [SerializeField] private AudioClip menuMusicClip;
 
     void Start()
@@ -22,37 +18,44 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
 
-        if (menuMusicClip != null && AudioManager.Instance != null)
-            AudioManager.Instance.PlayMusic(menuMusicClip);
+        if (AudioManager.Instance != null)
+        {
+            if (menuMusicClip != null)
+            {
+                AudioManager.Instance.StopMusic();
+                AudioManager.Instance.PlayMusic(menuMusicClip);
+            }
+            else
+            {
+                Debug.LogWarning("[MainMenu] menuMusicClip is not assigned.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[MainMenu] AudioManager.Instance is null.");
+        }
     }
 
     public void OnPlayPressed()
     {
-        PlayButtonClick();
-
         if (GameManager.Instance != null)
             GameManager.Instance.StartNewGame();
         else
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
-        }
+            SceneManager.LoadScene("Game");
     }
+
     public void OnOptionsPressed()
     {
-        PlayButtonClick();
         ShowOptionsPanel();
     }
 
     public void OnBackPressed()
     {
-        PlayButtonClick();
         ShowMainPanel();
     }
 
     public void OnQuitPressed()
     {
-        PlayButtonClick();
-
         if (GameManager.Instance != null)
             GameManager.Instance.QuitGame();
         else
@@ -67,18 +70,13 @@ public class MainMenu : MonoBehaviour
 
     void ShowMainPanel()
     {
-        if (mainPanel)   mainPanel.SetActive(true);
+        if (mainPanel)    mainPanel.SetActive(true);
         if (optionsPanel) optionsPanel.SetActive(false);
     }
 
     void ShowOptionsPanel()
     {
-        if (mainPanel)   mainPanel.SetActive(false);
+        if (mainPanel)    mainPanel.SetActive(false);
         if (optionsPanel) optionsPanel.SetActive(true);
-    }
-
-    void PlayButtonClick()
-    {
-
     }
 }

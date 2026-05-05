@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Request_For the Stable Master
   m_EditorClassIdentifier: Assembly-CSharp::RequestData
   requestTitle: For the Stable Master
-  flavourText: 'Several of the horses have begun coughing through the night, making
-    the stable master anxious about illness and irritable due to lack of sleep. A
-    calming draught would ease his worries. '
+  flavourText: "Several of the horses have begun coughing through the night, making
+    the stable master \nirritable due to lack of sleep. A calming draught would ease
+    his worries. "
   requiredMedicine: {fileID: 11400000, guid: d94e4a9f9957c4106a24807b1b703d83, type: 2}
   quantity: 1

@@ -73,8 +73,8 @@ public class DayNightCycle : MonoBehaviour
         CheckPhaseTransitions();
         FireThresholdEvents();
 
-        if (showDebugTime)
-            Debug.Log($"[DayNightCycle] Day {DayNumber} | {GetFormattedTime()} | {CurrentPhase}");
+        // if (showDebugTime)
+        //     Debug.Log($"[DayNightCycle] Day {DayNumber} | {GetFormattedTime()} | {CurrentPhase}");
     }
 
     void ApplySunSettings()

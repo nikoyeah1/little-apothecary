@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Request_For the Northern Sentries
   m_EditorClassIdentifier: Assembly-CSharp::RequestData
   requestTitle: For the Northern Sentries
-  flavourText: The guards on the northern battlements have lacerations and wounds
-    from sparring. They request a fast-acting medicine to speed up their healing.
+  flavourText: "The guards on the northern battlements have lacerations and wounds
+    from \nsparring. They request a fast-acting medicine to speed up their healing."
   requiredMedicine: {fileID: 11400000, guid: 3b2f3e78d48693a26aabf3a9e61496c0, type: 2}
   quantity: 1

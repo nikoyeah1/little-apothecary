@@ -16,6 +16,6 @@ MonoBehaviour:
   flavourText: 'The lady''s maid has been on her feet since before dawn
 
     dressing
-    the court for the ambassador''s visit. She repeatedly stresses about the outcome.'
+    the court for the ambassador''s visit, stressing about the outcome.'
   requiredMedicine: {fileID: 11400000, guid: d94e4a9f9957c4106a24807b1b703d83, type: 2}
   quantity: 1
