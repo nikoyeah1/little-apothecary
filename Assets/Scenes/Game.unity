@@ -1576,9 +1576,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: 240
-  m_MinHeight: -1
+  m_MinHeight: 20
   m_PreferredWidth: 240
-  m_PreferredHeight: -1
+  m_PreferredHeight: 20
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -3822,9 +3822,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: 240
-  m_MinHeight: -1
+  m_MinHeight: 20
   m_PreferredWidth: 240
-  m_PreferredHeight: -1
+  m_PreferredHeight: 20
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -14864,7 +14864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptionsMenu
   optionsPanel: {fileID: 1336454496}
-  masterSlider: {fileID: 0}
+  masterSlider: {fileID: 513028624}
   musicSlider: {fileID: 256975522}
   sfxSlider: {fileID: 115763320}
   ambientSlider: {fileID: 2042956756}
@@ -20499,9 +20499,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: 240
-  m_MinHeight: -1
+  m_MinHeight: 20
   m_PreferredWidth: 240
-  m_PreferredHeight: -1
+  m_PreferredHeight: 20
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1

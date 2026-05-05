@@ -4,15 +4,14 @@ using TMPro;
 
 public class OptionsMenu : MonoBehaviour
 {
-
     [Header("Panel")]
     [SerializeField] private GameObject optionsPanel;
 
     [Header("Volume Sliders")]
-    [SerializeField] private Slider          masterSlider;
-    [SerializeField] private Slider          musicSlider;
-    [SerializeField] private Slider          sfxSlider;
-    [SerializeField] private Slider          ambientSlider;
+    [SerializeField] private Slider masterSlider;
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider ambientSlider;
 
     [Header("Value Labels")]
     [SerializeField] private TextMeshProUGUI masterLabel;
@@ -29,27 +28,40 @@ public class OptionsMenu : MonoBehaviour
     private const string KEY_AMBIENT = "Vol_Ambient";
     private const string KEY_FOG     = "Display_Fog";
 
-    private bool _isOpen = false;
+    private bool _listenersAttached = false;
 
     void Start()
     {
         optionsPanel?.SetActive(false);
         LoadAndApplySettings();
-        SetupSliderListeners();
     }
 
     public void Open()
     {
-        _isOpen = true;
         optionsPanel?.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible   = true;
+
         RefreshSliderValues();
+
+        SetupSliderListeners();
+
+        if (masterSlider  == null) Debug.LogError("[OptionsMenu] MasterSlider not assigned.");
+        if (musicSlider   == null) Debug.LogError("[OptionsMenu] MusicSlider not assigned.");
+        if (sfxSlider     == null) Debug.LogError("[OptionsMenu] SFXSlider not assigned.");
+        if (ambientSlider == null) Debug.LogError("[OptionsMenu] AmbientSlider not assigned.");
     }
 
     public void Close()
     {
-        _isOpen = false;
         optionsPanel?.SetActive(false);
         SaveSettings();
+
+        if (GameManager.Instance != null && !GameManager.Instance.IsPaused)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible   = false;
+        }
     }
 
     void LoadAndApplySettings()
@@ -69,66 +81,94 @@ public class OptionsMenu : MonoBehaviour
         }
 
         RenderSettings.fog = fog;
-
-        RefreshSliderValues();
-        if (fogToggle != null) fogToggle.isOn = fog;
     }
 
     void RefreshSliderValues()
     {
-        if (masterSlider  != null) masterSlider.value  =
-            PlayerPrefs.GetFloat(KEY_MASTER,  1f);
-        if (musicSlider   != null) musicSlider.value   =
-            PlayerPrefs.GetFloat(KEY_MUSIC,   0.65f);
-        if (sfxSlider     != null) sfxSlider.value     =
-            PlayerPrefs.GetFloat(KEY_SFX,     1f);
-        if (ambientSlider != null) ambientSlider.value =
-            PlayerPrefs.GetFloat(KEY_AMBIENT, 0.55f);
+        if (masterSlider)
+        {
+            masterSlider.onValueChanged.RemoveAllListeners();
+            masterSlider.value = PlayerPrefs.GetFloat(KEY_MASTER, 1f);
+        }
+        if (musicSlider)
+        {
+            musicSlider.onValueChanged.RemoveAllListeners();
+            musicSlider.value = PlayerPrefs.GetFloat(KEY_MUSIC, 0.65f);
+        }
+        if (sfxSlider)
+        {
+            sfxSlider.onValueChanged.RemoveAllListeners();
+            sfxSlider.value = PlayerPrefs.GetFloat(KEY_SFX, 1f);
+        }
+        if (ambientSlider)
+        {
+            ambientSlider.onValueChanged.RemoveAllListeners();
+            ambientSlider.value = PlayerPrefs.GetFloat(KEY_AMBIENT, 0.55f);
+        }
+        if (fogToggle)
+            fogToggle.isOn = PlayerPrefs.GetInt(KEY_FOG, 1) == 1;
 
         UpdateLabels();
     }
 
     void SetupSliderListeners()
     {
-        masterSlider? .onValueChanged.AddListener(v =>
+        if (masterSlider)
         {
-            AudioManager.Instance?.SetMasterVolume(v);
-            UpdateLabels();
-        });
+            masterSlider.onValueChanged.RemoveAllListeners();
+            masterSlider.onValueChanged.AddListener(v =>
+            {
+                AudioManager.Instance?.SetMasterVolume(v);
+                UpdateLabels();
+            });
+        }
 
-        musicSlider?  .onValueChanged.AddListener(v =>
+        if (musicSlider)
         {
-            AudioManager.Instance?.SetMusicVolume(v);
-            UpdateLabels();
-        });
+            musicSlider.onValueChanged.RemoveAllListeners();
+            musicSlider.onValueChanged.AddListener(v =>
+            {
+                AudioManager.Instance?.SetMusicVolume(v);
+                UpdateLabels();
+            });
+        }
 
-        sfxSlider?    .onValueChanged.AddListener(v =>
+        if (sfxSlider)
         {
-            AudioManager.Instance?.SetSFXVolume(v);
-            UpdateLabels();
-        });
+            sfxSlider.onValueChanged.RemoveAllListeners();
+            sfxSlider.onValueChanged.AddListener(v =>
+            {
+                AudioManager.Instance?.SetSFXVolume(v);
+                UpdateLabels();
+            });
+        }
 
-        ambientSlider?.onValueChanged.AddListener(v =>
+        if (ambientSlider)
         {
-            AudioManager.Instance?.SetAmbientVolume(v);
-            UpdateLabels();
-        });
+            ambientSlider.onValueChanged.RemoveAllListeners();
+            ambientSlider.onValueChanged.AddListener(v =>
+            {
+                AudioManager.Instance?.SetAmbientVolume(v);
+                UpdateLabels();
+            });
+        }
 
-        fogToggle?.onValueChanged.AddListener(v =>
+        if (fogToggle)
         {
-            RenderSettings.fog = v;
-        });
+            fogToggle.onValueChanged.RemoveAllListeners();
+            fogToggle.onValueChanged.AddListener(v => RenderSettings.fog = v);
+        }
     }
 
     void UpdateLabels()
     {
-        if (masterLabel  != null && masterSlider  != null)
+        if (masterLabel  && masterSlider)
             masterLabel.text  = $"{Mathf.RoundToInt(masterSlider.value  * 100)}%";
-        if (musicLabel   != null && musicSlider   != null)
+        if (musicLabel   && musicSlider)
             musicLabel.text   = $"{Mathf.RoundToInt(musicSlider.value   * 100)}%";
-        if (sfxLabel     != null && sfxSlider     != null)
+        if (sfxLabel     && sfxSlider)
             sfxLabel.text     = $"{Mathf.RoundToInt(sfxSlider.value     * 100)}%";
-        if (ambientLabel != null && ambientSlider != null)
+        if (ambientLabel && ambientSlider)
             ambientLabel.text = $"{Mathf.RoundToInt(ambientSlider.value * 100)}%";
     }
 
