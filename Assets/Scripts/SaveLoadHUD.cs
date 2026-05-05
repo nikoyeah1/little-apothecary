@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class SaveLoadHUD : MonoBehaviour
 {
-
     [Header("Panels")]
     [SerializeField] private GameObject      saveLoadPanel;
     [SerializeField] private TextMeshProUGUI modeTitle;
@@ -14,10 +14,10 @@ public class SaveLoadHUD : MonoBehaviour
     [SerializeField] private Transform       slotsParent;
     [SerializeField] private GameObject      slotTemplate;
 
-    private bool         _isOpen    = false;
-    private bool         _isSaveMode = true;
+    private bool         _isOpen        = false;
+    private bool         _isSaveMode    = true;
     private int          _openedOnFrame = -1;
-    private GameObject[] _spawnedSlots = new GameObject[SaveManager.SlotCount];
+    private GameObject[] _spawnedSlots  = new GameObject[SaveManager.SlotCount];
 
     void Start()
     {
@@ -35,8 +35,8 @@ public class SaveLoadHUD : MonoBehaviour
             Close();
     }
 
-    public void OpenSave()  => Open(saveMode: true);
-    public void OpenLoad()  => Open(saveMode: false);
+    public void OpenSave() => Open(true);
+    public void OpenLoad() => Open(false);
 
     void Open(bool saveMode)
     {
@@ -71,39 +71,52 @@ public class SaveLoadHUD : MonoBehaviour
 
     void BuildSlots()
     {
-        if (SaveManager.Instance == null || slotTemplate == null) return;
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogError("[SaveLoadHUD] SaveManager.Instance is null - cannot build slots.");
+            return;
+        }
+
+        if (slotTemplate == null)
+        {
+            Debug.LogError("[SaveLoadHUD] SlotTemplate is not assigned.");
+            return;
+        }
+
+        for (int i = 0; i < _spawnedSlots.Length; i++)
+        {
+            if (_spawnedSlots[i] != null)
+            {
+                Destroy(_spawnedSlots[i]);
+                _spawnedSlots[i] = null;
+            }
+        }
 
         for (int i = 0; i < SaveManager.SlotCount; i++)
         {
-            if (_spawnedSlots[i] != null) Destroy(_spawnedSlots[i]);
-
             GameObject slot = Instantiate(slotTemplate, slotsParent);
             slot.SetActive(true);
             _spawnedSlots[i] = slot;
 
-            int capturedSlot = i;
-            SaveData peek    = SaveManager.Instance.PeekSlot(i);
-            bool     isEmpty = peek == null;
+            int      capturedSlot = i;
+            SaveData peek         = SaveManager.Instance.PeekSlot(i);
+            bool     isEmpty      = peek == null;
 
-            TextMeshProUGUI numText = slot.transform.Find("SlotNumberText")
-                ?.GetComponent<TextMeshProUGUI>();
+            var numText = slot.transform.Find("SlotNumberText")?.GetComponent<TextMeshProUGUI>();
             if (numText != null) numText.text = $"Slot {i + 1}";
 
-            TextMeshProUGUI infoText = slot.transform.Find("SlotInfoText")
-                ?.GetComponent<TextMeshProUGUI>();
+            var infoText = slot.transform.Find("SlotInfoText")?.GetComponent<TextMeshProUGUI>();
             if (infoText != null)
-            {
                 infoText.text = isEmpty
                     ? "<color=#666666>Empty</color>"
                     : $"Day {peek.dayNumber}  —  {peek.saveDateTime}";
-            }
 
-            Button actionBtn = slot.transform.Find("ActionButton")?.GetComponent<Button>();
+            var actionBtn = slot.transform.Find("ActionButton")?.GetComponent<Button>();
             if (actionBtn != null)
             {
                 actionBtn.interactable = _isSaveMode || !isEmpty;
 
-                TextMeshProUGUI btnText = actionBtn.GetComponentInChildren<TextMeshProUGUI>();
+                var btnText = actionBtn.GetComponentInChildren<TextMeshProUGUI>();
                 if (btnText != null) btnText.text = _isSaveMode ? "Save" : "Load";
 
                 actionBtn.onClick.RemoveAllListeners();
@@ -113,7 +126,7 @@ public class SaveLoadHUD : MonoBehaviour
                     actionBtn.onClick.AddListener(() => OnLoadSlot(capturedSlot));
             }
 
-            Button deleteBtn = slot.transform.Find("DeleteButton")?.GetComponent<Button>();
+            var deleteBtn = slot.transform.Find("DeleteButton")?.GetComponent<Button>();
             if (deleteBtn != null)
             {
                 deleteBtn.interactable = !isEmpty;
@@ -126,19 +139,13 @@ public class SaveLoadHUD : MonoBehaviour
     void OnSaveSlot(int slot)
     {
         if (SaveManager.Instance == null) return;
-
         bool ok = SaveManager.Instance.Save(slot);
-        if (ok)
-        {
-            AudioManager.Instance?.PlaySFX(null);
-            BuildSlots();
-        }
+        if (ok) StartCoroutine(RebuildNextFrame());
     }
 
     void OnLoadSlot(int slot)
     {
         if (SaveManager.Instance == null) return;
-
         bool ok = SaveManager.Instance.Load(slot);
         if (ok)
         {
@@ -149,7 +156,28 @@ public class SaveLoadHUD : MonoBehaviour
 
     void OnDeleteSlot(int slot)
     {
-        SaveManager.Instance?.DeleteSave(slot);
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogError("[SaveLoadHUD] SaveManager.Instance is null - cannot delete.");
+            return;
+        }
+
+        string path = SaveManager.GetSavePath(slot);
+        Debug.Log($"[SaveLoadHUD] Attempting delete of slot {slot} at: {path}");
+
+        SaveManager.Instance.DeleteSave(slot);
+
+        bool stillExists = System.IO.File.Exists(path);
+        Debug.Log(stillExists
+            ? $"[SaveLoadHUD] WARNING — file still exists after delete: {path}"
+            : $"[SaveLoadHUD] Slot {slot} deleted successfully.");
+
+        StartCoroutine(RebuildNextFrame());
+    }
+
+    IEnumerator RebuildNextFrame()
+    {
+        yield return null;
         BuildSlots();
     }
 }
