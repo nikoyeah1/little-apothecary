@@ -54,6 +54,13 @@ public class InteractionRaycaster : MonoBehaviour
 
     void Update()
     {
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            if (_currentTarget != null) 
+                ClearCurrentTarget();
+            return;
+        }
+
         if (GameManager.Instance != null && GameManager.Instance.IsPaused) return;
 
         ScanForInteractable();
