@@ -11542,7 +11542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayNightCycle
   dayDurationSeconds: 500
-  startingTimeOfDay: 0.3
+  startingTimeOfDay: 0.26
   pauseTime: 0
   sunLight: {fileID: 0}
   sunriseSunsetColor: {r: 1, g: 0.6, b: 0.3, a: 1}
